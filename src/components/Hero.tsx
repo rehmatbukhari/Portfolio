@@ -1,6 +1,7 @@
 import { Button } from "./ui/button";
 import { ArrowDown, Github, Linkedin, Mail, Brain, BarChart3, Database, TrendingUp, Zap, Target } from "lucide-react";
 import exampleImage from 'figma:asset/eab1bc6bbebca26940dca5ff936deb0e58864ef4.png';
+import { downloadResume } from "../utils/resumeDownload";
 
 export function Hero() {
   return (
@@ -38,10 +39,19 @@ export function Hero() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0">
+            <Button 
+              size="lg" 
+              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0"
+            >
               View My Projects
             </Button>
-            <Button variant="outline" size="lg" className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              onClick={downloadResume}
+              className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
+            >
               Download Resume
             </Button>
           </div>

@@ -7,6 +7,7 @@ import { Mail, MapPin, Phone, Send, Download } from "lucide-react";
 import { useState } from "react";
 import emailjs from '@emailjs/browser';
 import { emailjsConfig } from '../config/emailjs';
+import { downloadResume } from '../utils/resumeDownload';
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -135,13 +136,7 @@ export function Contact() {
               
               {/* Resume Download Button */}
               <Button 
-                onClick={() => {
-                  // Replace 'resume.pdf' with your actual resume file path
-                  const link = document.createElement('a');
-                  link.href = '/resume.pdf'; // Make sure to add your resume file to the public folder
-                  link.download = 'Rehmat_Bukhari_Resume.pdf';
-                  link.click();
-                }}
+                onClick={downloadResume}
                 className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0"
               >
                 <Download className="h-4 w-4 mr-2" />

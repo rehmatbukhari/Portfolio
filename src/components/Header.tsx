@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Menu, Download } from "lucide-react";
+import { downloadResume } from "../utils/resumeDownload";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -50,7 +51,12 @@ export function Header() {
           </nav>
           
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={downloadResume}
+              className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
+            >
               <Download className="h-4 w-4 mr-2" />
               Resume
             </Button>
@@ -74,7 +80,11 @@ export function Header() {
                     {item.label}
                   </a>
                 ))}
-                <Button variant="outline" className="w-full mt-4 border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white">
+                <Button 
+                  variant="outline" 
+                  onClick={downloadResume}
+                  className="w-full mt-4 border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Download Resume
                 </Button>
