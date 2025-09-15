@@ -3,8 +3,10 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
-import { Mail, MapPin, Phone, Send } from "lucide-react";
+import { Mail, MapPin, Phone, Send, Download } from "lucide-react";
 import { useState } from "react";
+import emailjs from '@emailjs/browser';
+import { emailjsConfig } from '../config/emailjs';
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -13,13 +15,36 @@ export function Contact() {
     subject: "",
     message: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission - in a real app, this would send to a backend
-    console.log("Form submitted:", formData);
-    alert("Thank you for your message! I'll get back to you soon.");
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    setIsSubmitting(true);
+
+    try {
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        to_name: 'Rehmat Bukhari'
+      };
+
+      await emailjs.send(
+        emailjsConfig.serviceId, 
+        emailjsConfig.templateId, 
+        templateParams, 
+        emailjsConfig.publicKey
+      );
+      
+      alert("Thank you for your message! I'll get back to you soon.");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert("Sorry, there was an error sending your message. Please try again or contact me directly at rbukhari241@gmail.com");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -93,7 +118,7 @@ export function Contact() {
                 Whether you have a project in mind, want to discuss data science trends, 
                 or explore collaboration opportunities, I'd love to hear from you.
               </p>
-              <div className="space-y-3 text-sm">
+              <div className="space-y-3 text-sm mb-6">
                 <div className="flex items-center gap-2 text-slate-300">
                   <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
                   Available for consulting projects
@@ -107,6 +132,21 @@ export function Contact() {
                   Interested in research collaborations
                 </div>
               </div>
+              
+              {/* Resume Download Button */}
+              <Button 
+                onClick={() => {
+                  // Replace 'resume.pdf' with your actual resume file path
+                  const link = document.createElement('a');
+                  link.href = '/resume.pdf'; // Make sure to add your resume file to the public folder
+                  link.download = 'Rehmat_Bukhari_Resume.pdf';
+                  link.click();
+                }}
+                className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download Resume
+              </Button>
             </div>
           </div>
           
@@ -172,9 +212,13 @@ export function Contact() {
                     />
                   </div>
                   
-                  <Button type="submit" className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white border-0">
+                  <Button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white border-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     <Send className="h-4 w-4 mr-2" />
-                    Send Message
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
                   </Button>
                 </form>
               </CardContent>
